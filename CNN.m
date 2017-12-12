@@ -39,7 +39,7 @@ rng(1) % For reproducibility
 %%
 
 options = trainingOptions('sgdm','MaxEpochs',20,...
-    'InitialLearnRate',0.001,'useGPU','no');
+    'InitialLearnRate',0.001);%,'useGPU','no');
 
 % just define a different set of layers for this particular dataset
 layers = [imageInputLayer([28 28 1]);

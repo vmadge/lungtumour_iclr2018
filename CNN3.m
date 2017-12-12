@@ -1,0 +1,47 @@
+close all; clear; clc;
+load('dataset/pixelmap.mat');
+
+imds = imageDatastore('dataset/PNG', 'IncludeSubfolders', true);
+A = imds.Files;
+N = length(A);
+labels = zeros(N,1);
+
+for i=1:N
+    A{i} = A{i}(end-67:end-4);
+end
+
+[C,ia,ib] = intersect(A,pixels.keys);
+labels(ia) = 1;
+imds.Labels = categorical(labels);
+
+layers = [imageInputLayer([512 512 1],'Normalization','none','Name','inputl')
+          convolution2dLayer([10 10],64,'Stride',1,'Padding',5,'Name','conv1')
+          reluLayer('Name','relu1')
+          maxPooling2dLayer(3,'Name','max1') 
+          dropoutLayer(0.1,'Name','dropout1')
+          convolution2dLayer([5 5],192,'Stride',1,'Padding',5,'Name','conv2')
+          reluLayer('Name','relu2')
+          maxPooling2dLayer(3,'Name','max2') 
+          dropoutLayer(0.1,'Name','dropout2')
+          convolution2dLayer([5 5],384,'Stride',1,'Name','conv3')
+          reluLayer('Name','relu3')
+          convolution2dLayer([3 3],256,'Stride',1,'Name','conv4')
+          reluLayer('Name','relu4')
+          convolution2dLayer([3 3],256,'Stride',1,'Name','conv5')
+          reluLayer('Name','relu5')
+          convolution2dLayer([3 3],256,'Stride',1,'Name','conv6')
+          reluLayer('Name','relu6')
+          convolution2dLayer([3 3],128,'Stride',1,'Name','conv7')
+          reluLayer('Name','relu7')
+          maxPooling2dLayer(3,'Name','max3') 
+          dropoutLayer(0.5,'Name','dropout3')
+          fullyConnectedLayer(2,'Name','full2')
+          softmaxLayer('Name','softm')
+          classificationLayer('Name','out')];
+      
+options = trainingOptions('sgdm','MaxEpochs',20,...
+    'InitialLearnRate',0.001);
+
+[imds_train, imds_test] = splitEachLabel(imds,0.0001,'randomized');
+
+convnet = trainNetwork(imds_train,layers,options)
