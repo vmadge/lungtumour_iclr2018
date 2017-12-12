@@ -1,0 +1,49 @@
+close all; clear; clc;
+
+% t1 = tic;
+% % Image datastore
+% imds = imageDatastore('dataset/PNG', 'IncludeSubfolders',true);
+% % Pixel label datastore
+% class_names = ["healthy" "abnormal"];
+% pixel_ids = [0 1];
+% pxds = pixelLabelDatastore('dataset/labels', class_names, pixel_ids,...
+%     'IncludeSubfolders', true);
+% t2 = toc(t1);
+% 
+% datasource = pixelLabelImageSource(imds,pxds);
+
+%% 
+
+load('dataset/pixelmap.mat');
+imds = imageDatastore('dataset/PNG', 'IncludeSubfolders', true);
+A = imds.Files;
+for i=1:length(A)
+    A{1} = file(end-67:end-4);
+
+%% 
+
+net = alexnet;
+
+% layers = net.Layers(1:end-3);
+% layers(end+1) = fullyConnectedLayer(2,... 
+%     'WeightLearnRateFactor',10,... 
+%     'BiasLearnRateFactor',20); 
+% layers(end+1) = softmaxLayer(); 
+% layers(end+1) = classificationLayer();
+% 
+% inputSize = net.Layers(1).InputSize(1:2);
+% imds.ReadFcn = @(loc)cat(3, imresize(imread(loc),inputSize),...
+%     imresize(imread(loc),inputSize), imresize(imread(loc),inputSize) );
+% pxds.ReadFcn = @(loc)cat(3, imresize(imread(loc),inputSize),...
+%     imresize(imread(loc),inputSize), imresize(imread(loc),inputSize) );
+
+optionsTransfer = trainingOptions('sgdm',... 
+    'MiniBatchSize',250,... 
+    'MaxEpochs',30,... 
+    'InitialLearnRate',0.00125,... 
+    'LearnRateDropFactor',0.1,... 
+    'LearnRateDropPeriod',20);
+
+
+
+net = trainNetwork(datasource,layers,optionsTransfer);
