@@ -24,11 +24,13 @@ options = trainingOptions('sgdm',...
     'LearnRateDropFactor',0.1,... 
     'LearnRateDropPeriod',20);
 
-[subset{1} subset{2} subset{3} subset{4} subset{5} ...
-    subset{6} subset{7} subset{8} subset{9} subset{10}] = ...
-    splitEachLabel(imds, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
+subset{i} = partition(imds, n, i);
 
-for i=1:10
+[subset{1} subset{2} subset{3} subset{4} subset{5} ...
+    subset{6} subset{
+
+n = 10;
+for i=1:n
     fprintf('Subset %i:\n', i);
     [train{i}, test{i}] = splitEachLabel(subset{i}, 0.7, 'randomized');
     net = trainNetwork(train{i},layers,options);

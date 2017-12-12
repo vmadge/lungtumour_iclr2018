@@ -31,10 +31,12 @@ layers = [imageInputLayer([512 512 1],'Normalization','none','Name','inputl')
 options = trainingOptions('sgdm','MaxEpochs',20,...
     'InitialLearnRate',0.001);
 
-n = 10;
-for i=1:n
+[subset{1} subset{2} subset{3} subset{4} subset{5} ...
+    subset{6} subset{7} subset{8} subset{9} subset{10}] = ...
+    splitEachLabel(imds, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
+
+for i=1:10
     fprintf('Subset %i:\n', i);
-    subset{i} = partition(imds, n, i);
     [train{i}, test{i}] = splitEachLabel(subset{i}, 0.7, 'randomized');
     convnet = trainNetwork(train{i},layers,options);
     prediction{i} = classify(convnet, test{i});
