@@ -1,4 +1,5 @@
 close all; clear; clc;
+t1 = tic;
 load('dataset/pixelmap.mat');
 
 imds = imageDatastore('dataset/PNG', 'IncludeSubfolders', true);
@@ -50,3 +51,7 @@ for i=1:n
     convnet = trainNetwork(train{i},layers,options);
     prediction{i} = classify(convnet, test{i});
 end
+
+save('cnn.mat');
+t2 = toc(t1);
+fprintf('Success: %i minutes to compute.\n', floor(t2/60));
