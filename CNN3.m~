@@ -47,6 +47,6 @@ for i=1:n
     fprintf('Subset %i:\n', i);
     subset{i} = partition(imds, n, i);
     [train{i}, test{i}] = splitEachLabel(subset{i}, 0.7, 'randomized');
-    convnet = trainNetwork(train{i},layers,options);
-    prediction{i} = classify(convnet, test{i});
+    convnet = trainNetwork(train,layers,options);
+    prediction{i} = classify(convnet, tes
 end

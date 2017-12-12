@@ -26,7 +26,7 @@ layers(end+1) = fullyConnectedLayer(2,...
     'BiasLearnRateFactor',20); 
 layers(end+1) = softmaxLayer(); 
 layers(end+1) = classificationLayer();
-% 
+
 inputSize = net.Layers(1).InputSize(1:2);
 imds.ReadFcn = @(loc)cat(3, imresize(imread(loc),inputSize),...
     imresize(imread(loc),inputSize), imresize(imread(loc),inputSize) );
@@ -38,6 +38,12 @@ optionsTransfer = trainingOptions('sgdm',...
     'LearnRateDropFactor',0.1,... 
     'LearnRateDropPeriod',20);
 
-[imds_train, imds_test] = splitEachLabel(imds,0.01,'randomized');
 
-net = trainNetwork(imds_train,layers,optionsTransfer);
+n = 10;
+for i=1:n
+    fprintf('Subset %i:\n', i);
+    subset{i} = partition(imds, n, i);
+    [train{i}, test{i}] = splitEachLabel(subset{i}, 0.7, 'randomized');
+    net = trainNetwork(train{i},layers,options);
+    prediction{i} = classify(net, test{i});
+end
