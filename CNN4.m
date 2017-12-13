@@ -3,7 +3,7 @@ t1 = tic;
 
 load('datastore.mat');
 
-layers = [imageInputLayer([512 512 1],'Normalization','none','Name','inputl')
+layers = [imageInputLayer([256 256 1],'Normalization','none','Name','inputl')
           convolution2dLayer([10 10],64,'Stride',1,'Padding',5,'Name','conv1')
           reluLayer('Name','relu1')
           maxPooling2dLayer(3,'Name','max1') 
