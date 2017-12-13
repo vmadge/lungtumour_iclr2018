@@ -24,11 +24,11 @@ layers = [imageInputLayer([512 512 1],'Normalization','none','Name','inputl')
           reluLayer('Name','relu7')
           maxPooling2dLayer(3,'Name','max3') 
           dropoutLayer(0.5,'Name','dropout3')
-          fullyConnectedLayer(2,'Name','full2')
+          fullyConnectedLayer(2,'Name','full2')clc
           softmaxLayer('Name','softm')
           classificationLayer('Name','out')];
 
-inputSize = layers(1).InputSize(1:3);
+inputSize = layers(1).InputSize(1:2);
 imds.ReadFcn = @(loc)imresize(imread (loc), inputSize);
 
 options = trainingOptions('sgdm','MaxEpochs',20,...
