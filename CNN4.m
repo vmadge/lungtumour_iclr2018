@@ -28,7 +28,7 @@ layers = [imageInputLayer([512 512 1],'Normalization','none','Name','inputl')
           softmaxLayer('Name','softm')
           classificationLayer('Name','out')];
 
-inputSize = net.Layers(1).InputSize(1:2);
+inputSize = layers(1).InputSize(1:3);
 imds.ReadFcn = @(loc)imresize(imread (loc), inputSize);
 
 options = trainingOptions('sgdm','MaxEpochs',20,...
