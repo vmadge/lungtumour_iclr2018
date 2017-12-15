@@ -1,3 +1,6 @@
+% Create a pixel Map object of all the pixel labels in the dataset, and
+% create a mask image for each PNG in the dataset
+
 close all; clear; clc;
 t1 = tic;
 

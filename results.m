@@ -1,27 +1,36 @@
-close all; clear; clc;
-load('cnn.mat');
+% Compute accuracy metrics from the saved results of AlexNet or CNN
 
+close all; clear; clc;
+load('alexnet.mat');
+% load('cnn.mat');
+
+% Build a composite array of all predictions/labels
 ot = [];
 yt = [];
 
+% For each subset
 for i = 1:10
+    % Index Subset
     pred = prediction{i};
     label = test{i}.Labels;
     
-    o = grp2idx(pred) - 1;
-    y = grp2idx(label) - 1;
+    % Categorical variables into integers
+    o = grp2idx(pred) - 1; % Prediction
+    y = grp2idx(label) - 1; % Label
     
+    % Append total array
     ot = [ot;o];
     yt = [yt;y];
     
-    T = o == y;
-    n = length(T);
+    T = o == y; % True/correct indices
+    n = length(T); 
     
-    TP = sum(T & o);
-    TN = sum(T & ~o);
-    FP = sum(~T & o);
-    FN = sum(~T & ~o);
+    TP = sum(T & o); % True Positives
+    TN = sum(T & ~o); % True Negatives
+    FP = sum(~T & o); % False Positives
+    FN = sum(~T & ~o); % False negatives
     
+    % Accuracy metrics
     accuracy = (TP + TN)/(TP + TN + FP + FN);
     precision = TP/(TP+FP);
     recall = TP/(TP+FN);
@@ -30,6 +39,7 @@ for i = 1:10
     FPR = FP/(TN+FP);
     FNR = FN/(TP+FN);
     
+    % Print results
     text = ['Subset %i: \n', ...
         'Accuracy: %3.2f%% \n', ...
         'Precision: %3.2f%% \n', ...
@@ -45,6 +55,7 @@ for i = 1:10
     
 end
 
+% Repeat for the cumulative array to get the total scores
 T = ot == yt;
 n = length(T);
 

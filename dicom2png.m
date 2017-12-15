@@ -1,3 +1,5 @@
+% Convert the library of DICOM files to PNG images and copy over the 
+% XML labels. 
 close all; clear; clc;
 
 %Initialize waitbar
